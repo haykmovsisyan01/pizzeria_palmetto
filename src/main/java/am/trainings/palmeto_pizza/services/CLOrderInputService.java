@@ -47,6 +47,22 @@ public class CLOrderInputService implements OrderInputService {
         }
     }
 
+    @Override
+    public boolean checkIfCustomerWantsToOrder() {
+        while(true){
+            try {
+                String line;
+                System.out.print("Want to order another product(y/n): ");
+                if((line = reader.readLine()).trim().equalsIgnoreCase("y")){
+                    return true;
+                }else if(line.equalsIgnoreCase("n")){
+                    return false;
+                }
+            } catch (IOException ignored) {
+            }
+        }
+    }
+
     private Pizza getInputPizza(BufferedReader reader) throws IOException {
         String pizzaName = getInputPizzaName(reader);
         PizzaType pizzaType = getInputPizzaType(reader);

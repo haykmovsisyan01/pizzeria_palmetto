@@ -18,6 +18,13 @@ public class Order implements Priceable {
         return orderId;
     }
 
+    void addOrderItem(OrderItem orderItem){
+        if(orderItem==null){
+            throw new IllegalArgumentException();
+        }
+        orderItems.add(orderItem);
+    }
+
     @Override
     public BigDecimal getPrice() {
         return orderItems.stream()
@@ -34,7 +41,7 @@ public class Order implements Priceable {
         for (OrderItem orderItem : orderItems) {
             sb.append(orderItem).append("\n");
         }
-
+        sb.append("Total price: ").append(getPrice()).append("$");
         return sb.toString();
     }
 }

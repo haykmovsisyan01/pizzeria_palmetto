@@ -29,4 +29,10 @@ public class CLView implements View {
     public void writeOrder(Order order) {
         orderOutputService.saveOrder(order);
     }
+
+    @Override
+    public boolean checkIfCustomerWantsToOrder() {
+        return orderInputService.checkIfCustomerWantsToOrder();
+    }
+
 }

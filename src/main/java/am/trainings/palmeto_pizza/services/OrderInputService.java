@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface OrderInputService {
     Customer inputCustomer();
     Optional<OrderItem> inputOrderItem();
+    boolean checkIfCustomerWantsToOrder();
 }

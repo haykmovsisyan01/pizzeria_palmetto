@@ -9,4 +9,6 @@ public interface View {
     OrderItem readOrderItem();
 
     void writeOrder(Order order);
+
+    boolean checkIfCustomerWantsToOrder();
 }

@@ -17,7 +17,7 @@ public class OrderService {
         if (orderCounter > 100000) orderCounter = 10000;
     }
 
-    public Optional<Order> order( Customer customer,OrderItem... orderItems) {
+    public Optional<Order> order(Customer customer, OrderItem... orderItems) {
         if (orderItems == null || orderItems.length == 0) {
             System.out.println("You didnt select any orders!");
             return Optional.empty();

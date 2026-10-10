@@ -12,6 +12,8 @@ import am.trainings.palmeto_pizza.view.View;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Application {
@@ -23,11 +25,20 @@ public class Application {
         this.orderService = orderService;
     }
 
+    private boolean checkIfCustomerWantsToOrder() {
+        return view.checkIfCustomerWantsToOrder();
+    }
+
     public void run() {
         Customer customer = view.readCustomer();
-        OrderItem orderItem = view.readOrderItem();
+        List<OrderItem> orderItems = new ArrayList<>();
+        Optional<Order> order;
+        do {
+            orderItems.add(view.readOrderItem());
+        } while (checkIfCustomerWantsToOrder());
 
-        Optional<Order> order = orderService.order(customer, orderItem);
+
+        order = orderService.order(customer, orderItems.toArray(new OrderItem[0]));
         view.writeOrder(order.orElseThrow());
     }
 
