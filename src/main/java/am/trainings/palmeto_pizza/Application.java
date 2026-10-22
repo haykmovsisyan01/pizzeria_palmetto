@@ -1,11 +1,10 @@
 package am.trainings.palmeto_pizza;
 
+import am.trainings.palmeto_pizza.common.ApplicationContext;
 import am.trainings.palmeto_pizza.models.Customer;
 import am.trainings.palmeto_pizza.models.Order;
 import am.trainings.palmeto_pizza.models.OrderItem;
-import am.trainings.palmeto_pizza.services.CLOrderInputService;
-import am.trainings.palmeto_pizza.services.FileOrderOutputService;
-import am.trainings.palmeto_pizza.services.OrderService;
+import am.trainings.palmeto_pizza.services.*;
 import am.trainings.palmeto_pizza.view.CLView;
 import am.trainings.palmeto_pizza.view.View;
 
@@ -31,14 +30,34 @@ public class Application {
         view.writeOrder(order.orElseThrow());
     }
 
+    private static void initialize(ApplicationContext context, BufferedReader reader) {
+        context.register(
+                OrderInputService.class,
+                () -> new CLOrderInputService(reader)
+        );
+        context.register(
+                OrderOutputService.class,
+                FileOrderOutputService::new
+        );
+        context.register(View.class, () -> new CLView(
+                context.get(OrderInputService.class),
+                context.get(OrderOutputService.class)
+        ));
+        context.register(
+                OrderService.class,
+                OrderService::new
+        );
+    }
+
     public static void main(String[] args) {
+        ApplicationContext ctx = new ApplicationContext();
+
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+            initialize(ctx, reader);
+
             Application application = new Application(
-                    new CLView(
-                            new CLOrderInputService(reader),
-                            new FileOrderOutputService()
-                    ),
-                    new OrderService()
+                    ctx.get(View.class),
+                    ctx.get(OrderService.class)
             );
 
             application.run();
